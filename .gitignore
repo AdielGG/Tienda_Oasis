@@ -1,0 +1,24 @@
+Backend/temp
+Fontend/tienda_oasis/node_modules
+Fontend/tienda_oasis/dist
+Fontend/tienda_oasis/.DS_Store
+
+
+# local env files
+.env.local
+.env.*.local
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
