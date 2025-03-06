@@ -17,7 +17,7 @@ func InitDatabaseConfig() {
 		Host:     "localhost",
 		Port:     "5432",
 		User:     "postgres",
-		Password: "postgres",
-		Database: "backend",
+		Password: "Adiel.123",
+		Database: "oasis",
 	}
 }
