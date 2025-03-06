@@ -53,3 +53,31 @@ func DeleteProduct(id int) error {
 	}
 	return db.Delete(&models.Product{}, id).Error
 }
+
+func GetProductByType(Type string) (models.Product, error) {
+	db, err := ConnectDB()
+	if err != nil {
+		return models.Product{}, err
+	}
+	var product models.Product
+
+	err = db.Where("type = ?", Type).First(&product).Error
+	if err != nil {
+		return models.Product{}, err
+	}
+	return product, nil
+}
+
+func GetProductByCategory(Category string) (models.Product, error) {
+	db, err := ConnectDB()
+	if err != nil {
+		return models.Product{}, err
+	}
+	var product models.Product
+
+	err = db.Where("category = ?", Category).First(&product).Error
+	if err != nil {
+		return models.Product{}, err
+	}
+	return product, nil
+}

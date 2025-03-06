@@ -25,6 +25,20 @@ func GetUser(id int) (models.User, error) {
 	return user, nil
 }
 
+func GetUserByUserName(username string) (models.User, error) {
+	db, err := ConnectDB()
+	if err != nil {
+		return models.User{}, err
+	}
+	var user models.User
+
+	err = db.Where("username = ?", username).First(&user).Error
+	if err != nil {
+		return models.User{}, err
+	}
+	return user, nil
+}
+
 func GetAllUsers() ([]models.User, error) {
 	db, err := ConnectDB()
 	if err != nil {
