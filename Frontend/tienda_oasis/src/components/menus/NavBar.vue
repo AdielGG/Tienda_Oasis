@@ -2,13 +2,13 @@
     <nav>
         <ul class="nav-bar">
             <li>
-                <a href="" class="nav-item">Inicio</a>
+                <a href="/" class="nav-item">Inicio</a>
             </li>
             <li>
-                <a href="" class="nav-item">Productos</a>
+                <a href="/products" class="nav-item">Productos</a>
             </li>
             <li>
-                <a href="" class="nav-item">Nosotros</a>
+                <a href="/about" class="nav-item">Nosotros</a>
             </li>
             <li>
                 <a href="" class="nav-item">Ayuda</a>
