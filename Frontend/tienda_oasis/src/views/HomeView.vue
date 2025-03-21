@@ -11,7 +11,7 @@ import NavBar from '@/components/menus/NavBar.vue';
       <h1> <b>Tienda Oasis</b> </h1>
     </header>
     
-    <NavBar/>
+    <NavBar />
 
 
   </main>
@@ -25,13 +25,15 @@ import NavBar from '@/components/menus/NavBar.vue';
     width: 100%;
     text-align: center;
     
-
   }
+
+  
   .header h1{
     
-    color: rgb(255, 238, 0);
+    color: rgb(255, 255, 255);
     font-size: 4em;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    text-shadow: 0 0 10px black;
   }
 
   main{

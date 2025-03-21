@@ -1,22 +1,28 @@
 package main
 
 import (
+	conf "backend/config"
+	"backend/database"
 	"backend/handler"
-	sv_cfg "backend/servercfg"
+	"fmt"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 
-	router := gin.Default()
+	router := gin.New()
+	router.Use(gin.Recovery())
+	router.Use(cors.Default())
 
 	//handlers User
-	router.POST("/user", handler.CreateUser)
-	router.GET("/users", handler.GetAllUsers)
+	router.POST("/register", handler.CreateUser)
 	router.GET("/user/:username", handler.GetUserByUserName)
-	router.PUT("/user/:username", handler.UpdateUser)
-	router.DELETE("/user/:username", handler.DeleteUser)
+	router.POST("/login", handler.Login)
+	// router.GET("/users", handler.GetAllUsers)
+	// router.PUT("/user/:username", handler.UpdateUser)
+	// router.DELETE("/user/:username", handler.DeleteUser)
 
 	//handlers Product
 	router.GET("/products", handler.GetAllProducts)
@@ -26,9 +32,26 @@ func main() {
 	router.PUT("/product/:id", handler.UpdateProduct)
 	router.DELETE("/product/:id", handler.DeleteProduct)
 
+	//handlers Sugestion
+
+	router.POST("/suggestion", handler.CreateSugestion)
+	router.GET("/suggestions", handler.GetAllSugestions)
+	router.GET("/suggestion/:id", handler.GetSugestion)
+	router.PUT("/suggestion/:id", handler.UpdateSugestion)
+	router.DELETE("/suggestion/:id", handler.DeleteSugestion)
+
 	//Cargar Configuracion de la Base de Datos
-	sv_cfg.InitDatabaseConfig()
+	// namedb, err := ioutil.ReadFile("basedatos.txt")
+	// password, err := ioutil.ReadFile("password.txt")
+	// if err != nil {
+	// 	panic(err)
+	// }
+
+	conf.InitDatabaseConfig()
+	// conf.InitDatabaseConfig(string(namedb), string(password))
+	database.CreateDB()
 
 	//Iniciar Servidor
-	router.Run(sv_cfg.ServerHost + ":" + sv_cfg.ServerPort)
+	router.Run(conf.ServerHost + ":" + conf.ServerPort)
+	fmt.Scanln()
 }

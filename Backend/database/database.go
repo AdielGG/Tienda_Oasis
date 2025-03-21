@@ -1,8 +1,8 @@
 package database
 
 import (
+	cfg "backend/config"
 	"backend/models"
-	cfg "backend/servercfg"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

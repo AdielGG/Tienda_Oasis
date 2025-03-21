@@ -5,23 +5,12 @@ import (
 	"backend/models"
 	"log"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
-func GetAllUsers(c *gin.Context) {
-	users, err := database.GetAllUsers()
-	if err != nil {
-		log.Println(err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	c.JSON(http.StatusOK, users)
-}
-
 func CreateUser(c *gin.Context) {
-	var user models.User
+	user := models.User{}
 	err := c.ShouldBindJSON(&user)
 	if err != nil {
 		log.Println(err)
@@ -34,67 +23,48 @@ func CreateUser(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusCreated, user)
-}
-
-func GetUserByID(c *gin.Context) {
-	id, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		log.Println(err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	user, err := database.GetUser(id)
-	if err != nil {
-		log.Println(err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	c.JSON(http.StatusOK, user)
+	c.JSON(http.StatusOK, gin.H{"OK": "Logued in successfully"})
 }
 
 func GetUserByUserName(c *gin.Context) {
-	username := c.Param("username")
+	user, err := database.GetUserByUserName(c.Param("username"))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"user": user})
+}
 
+func Login(c *gin.Context) {
+	type LoginRequest struct {
+		Username string `json:"username"`
+		Password string `json:"password"`
+	}
+	var loginRequest LoginRequest
+	err := c.ShouldBindJSON(&loginRequest)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	username := loginRequest.Username
+	password := loginRequest.Password
 	user, err := database.GetUserByUserName(username)
 	if err != nil {
-		log.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, user)
-}
-
-func UpdateUser(c *gin.Context) {
-	var user models.User
-	err := c.ShouldBindJSON(&user)
-	if err != nil {
-		log.Println(err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	if user.Password != password {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Usuario o contraseña incorrectos"})
 		return
 	}
-	err = database.UpdateUser(user)
-	if err != nil {
-		log.Println(err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	c.JSON(http.StatusOK, user)
-}
-
-func DeleteUser(c *gin.Context) {
-	id, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		log.Println(err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	err = database.DeleteUser(id)
-	if err != nil {
-		log.Println(err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	c.JSON(http.StatusOK, gin.H{"message": "User deleted successfully"})
+	// token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+	// 	"username": user.Username,
+	// 	"id":       user.ID,
+	// })
+	// tokenString, err := token.SignedString([]byte("secret"))
+	// if err != nil {
+	// 	c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	// 	return
+	// }
+	c.JSON(http.StatusOK, gin.H{"user": user})
 }
