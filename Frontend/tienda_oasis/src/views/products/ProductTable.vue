@@ -5,9 +5,9 @@
         align-tabs="center"
         color="deep-purple-accent-4"
       >
-        <v-tab :value="programs">Programas</v-tab>
-        <v-tab :value="curses">Cursos</v-tab>
-        <v-tab :value="books">Libros</v-tab>
+        <v-tab value="programs">Programas</v-tab>
+        <v-tab value="curses">Cursos</v-tab>
+        <v-tab value="books">Libros</v-tab>
       </v-tabs>
   
       <v-tabs-window v-model="tab">

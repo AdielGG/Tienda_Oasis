@@ -84,11 +84,10 @@
 <script>
 import store from '@/store/store';
 import LoginBottom from './LoginBottom.vue';
-import router from '@/router';
 export default{
     data(){
         return {
-            drawer: false,
+            drawer: store.getters.getDrawer,
             rail: false,
             loged: store.state.logued,
             userd: {
@@ -104,9 +103,8 @@ export default{
     },
     methods:{
         logout(){
-            store.state.user = undefined;
-            store.state.logued = false;
-            router.go('/')
+            store.mutations.setUser(store.state,null)
+            store.mutations.set
         },
       },
     components: {
@@ -153,7 +151,9 @@ export default{
 li {
     margin: 10px;
     list-style: none;
-}
+    text-align: center;
+  }
+
 
 .nav-item{
     text-align: center;

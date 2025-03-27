@@ -2,8 +2,8 @@
     <v-card
       :disabled="loading"
       :loading="loading"
-      class="mx-auto my-12"
-      max-width="374"
+      class="product-item mx-auto my-12"
+      max-width="250"
     >
       <template v-slot:loader="{ isActive }">
         <v-progress-linear
@@ -15,17 +15,15 @@
       </template>
   
       <v-img
-        height="250"
-        src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
+        height="150"
+        :src="img"
         cover
       ></v-img>
   
       <v-card-item>
-        <v-card-title>Cafe Badilico</v-card-title>
+        <v-card-title>{{ title }}</v-card-title>
   
         <v-card-subtitle>
-          <span class="me-1">Local Favorite</span>
-  
           <v-icon
             color="error"
             icon="mdi-fire-circle"
@@ -40,7 +38,7 @@
           class="mx-0"
         >
           <v-rating
-            :model-value="4.5"
+            :model-value="rating"
             color="amber"
             density="compact"
             size="small"
@@ -49,32 +47,19 @@
           ></v-rating>
   
           <div class="text-grey ms-4">
-            4.5 (413)
+            {{ rating }}
           </div>
         </v-row>
   
         <div class="my-4 text-subtitle-1">
-          $ • Italian, Cafe
+          $: {{ price }}
         </div>
   
-        <div>Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.</div>
+        <div>{{ description }}</div>
       </v-card-text>
   
       <v-divider class="mx-4 mb-1"></v-divider>
   
-      <v-card-title>Tonight's availability</v-card-title>
-  
-      <div class="px-4 mb-2">
-        <v-chip-group v-model="selection" selected-class="bg-deep-purple-lighten-2">
-          <v-chip>5:30PM</v-chip>
-  
-          <v-chip>7:30PM</v-chip>
-  
-          <v-chip>8:00PM</v-chip>
-  
-          <v-chip>9:00PM</v-chip>
-        </v-chip-group>
-      </div>
   
       <v-card-actions>
         <v-btn
@@ -87,13 +72,39 @@
       </v-card-actions>
     </v-card>
   </template>
-  <script setup>
-    import { ref } from 'vue'
-  
-    const loading = ref(false)
-    const selection = ref(1)
-    function reserve () {
-      loading.value = true
-      setTimeout(() => (loading.value = false), 2000)
+  <script>
+    export default{
+      props:{
+        img: null,
+        title: null,
+        description: null,
+        rating: null,
+        price: null
+
+      },
+      data(){
+        return{
+
+          selection: 1,
+          loading: false
+        }
+      },
+      methods:{
+
+        reserve() {
+          this.loading = true
+          setTimeout(() => (loading.value = false), 200)
+          
+        }  
+      }
     }
   </script>
+
+  <style>
+    .product-item{
+      margin: auto;
+      background-color: rgb(255, 255, 255);
+      box-shadow: 0 0  3px rgb(87, 87, 87);
+    }
+
+</style>
