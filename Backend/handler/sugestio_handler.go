@@ -10,46 +10,33 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetAllProducts(c *gin.Context) {
-	products, err := database.GetAllProducts()
+func CreateSugestion(c *gin.Context) {
+	var sugestion models.Sugestion
+	if err := c.ShouldBindJSON(&sugestion); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	err := database.CreateSugestion(sugestion)
 	if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, products)
+	c.JSON(http.StatusCreated, sugestion)
+
 }
 
-func CreateProduct(c *gin.Context) {
-	var product models.Product
-	err := c.ShouldBindJSON(&product)
+func GetAllSugestions(c *gin.Context) {
+	sugestions, err := database.GetAllSugestions()
 	if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	err = database.CreateProduct(product)
-	if err != nil {
-		log.Println(err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	c.JSON(http.StatusCreated, product)
+	c.JSON(http.StatusOK, sugestions)
 }
 
-func GetProductByType(c *gin.Context) {
-	Type := c.Param("type")
-
-	product, err := database.GetProductByType(Type)
-	if err != nil {
-		log.Println(err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	c.JSON(http.StatusOK, product)
-}
-
-func GetProductByID(c *gin.Context) {
+func GetSugestion(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		log.Println(err)
@@ -57,44 +44,46 @@ func GetProductByID(c *gin.Context) {
 		return
 	}
 
-	product, err := database.GetProduct(id)
+	sugestion, err := database.GetSugestion(id)
 	if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, product)
+	c.JSON(http.StatusOK, sugestion)
 }
 
-func UpdateProduct(c *gin.Context) {
-	var product models.Product
-	err := c.ShouldBindJSON(&product)
+func UpdateSugestion(c *gin.Context) {
+	var sugestion models.Sugestion
+
+	err := c.ShouldBindJSON(&sugestion)
 	if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	err = database.UpdateProduct(product)
+	err = database.UpdateSugestion(sugestion)
+
 	if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, product)
+	c.JSON(http.StatusOK, sugestion)
 }
 
-func DeleteProduct(c *gin.Context) {
+func DeleteSugestion(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	err = database.DeleteProduct(id)
+	err = database.DeleteSugestion(id)
 	if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "Product deleted successfully"})
+	c.JSON(http.StatusOK, gin.H{"message": "Sugestion deleted successfully"})
 }

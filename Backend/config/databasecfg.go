@@ -15,10 +15,10 @@ var (
 func InitDatabaseConfig() {
 	// func InitDatabaseConfig(namedb, pasword string) {
 	DbConfig = DatabaseConfig{
-		Host:     "localhost",
+		Host:     "127.0.0.1",
 		Port:     "5432",
-		User:     "postgres",
-		Password: "Adiel.123",
+		User:     "adiel",
+		Password: "Adiel123",
 		Database: "oasis",
 	}
 }

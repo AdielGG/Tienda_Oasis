@@ -20,7 +20,7 @@ func main() {
 	router.POST("/register", handler.CreateUser)
 	router.GET("/user/:username", handler.GetUserByUserName)
 	router.POST("/login", handler.Login)
-	// router.GET("/users", handler.GetAllUsers)
+	router.GET("/users", handler.GetAllUsers)
 	// router.PUT("/user/:username", handler.UpdateUser)
 	// router.DELETE("/user/:username", handler.DeleteUser)
 

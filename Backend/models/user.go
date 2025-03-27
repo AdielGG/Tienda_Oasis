@@ -8,5 +8,7 @@ type User struct {
 	Age      string `json:"age"`
 	Email    string `json:"email" gorm:"unique"`
 	Password string `json:"password"`
+	Role     string `json:"role"`
+	Token    string `json:"token"`
 	//Image    []byte `json:"image"`
 }
