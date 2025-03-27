@@ -6,7 +6,7 @@
                 <img src="../../assets/oasis.png" alt="Logo"  class="logo">
             </div>
 
-            <v-card-title >
+            <v-card-title>
                 
                 <v-row>
                     <v-col cols="12">
@@ -59,7 +59,7 @@
                         ></v-btn>
                         </template>
                     </v-card>
-                    </v-dialog>
+                </v-dialog>
                 
             </section>
         </v-card>
@@ -84,22 +84,35 @@ export default {
     methods: {
         async login() {
             this.loading = true;
+
             if(!this.validar()){
                 this.loading = false;
                 return;
             }
+
             await axios.post('http://localhost:8080/login', {
                 username: this.username,
                 password: this.password
+
             }).then(response => {
-                this.loading = false;
-                console.log(response.data);
-                    store.state.user = response.data.user
+
+                
+                store.state.user = response.data.user
                 store.state.logued = true;
-                this.$router.push('/')
+                
+                this.loading = false;
+
+                if(store.state.user.role === 'admin'){
+                    this.$router.push('/admin')
+                }
+                else{
+                    this.$router.push('/')
+                }
+
             }).catch(error => {
                 
                 console.log(error);
+
                 this.loading = false;
                 this.dialog = true;
  
@@ -116,28 +129,40 @@ export default {
         },
         validar(){
             if(this.username === '' || this.password === ''){
+
                 this.dialog = true;
                 this.errorText = 'El usuario o la contraseña no puede estar vacio';
                 this.ErrorTitle = 'Campos requeridos';
+
                 return false;
+
             }
             if(this.username.length < 4 || this.password.length < 4){
+
                 this.dialog = true;
                 this.errorText = 'El usuario o la contraseña debe tener al menos 4 caracteres';
                 this.ErrorTitle = 'Longitud minimo';
+
                 return false;
+
             }
             if(this.username.length > 20 || this.password.length > 20){
+
                 this.dialog = true;
                 this.errorText = 'El usuario o la contraseña debe tener al menos 20 caracteres';
                 this.ErrorTitle = 'Longitud maximo';
+
                 return false;
+
             }
             for(let i = 0; i < this.username.length; i++){
+
                 if(!this.username[i].match(/[a-zA-Z]/)){
+
                     this.dialog = true;
                     this.errorText = 'El usuario solo puede contener letras';
                     this.ErrorTitle = 'Caracteres no permitidos';
+
                     return false;
                 }
             }
@@ -196,10 +221,11 @@ export default {
     width: 90%;
     border-radius: 1em;
     height: 2em;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    transition: 0.3s;
 }
 .btn-primary{
     background-color: #007bff;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 
 }
 
@@ -210,6 +236,11 @@ export default {
 .btn-primary:active{
     background-color: #6070ff;
     transition: background-color 0.3s ease;
+}
+.btn-secondary:hover{
+    color:#007bff;
+    border: solid #007bff 1px;
+    transition: 0.3s;
 }
 
 </style>
