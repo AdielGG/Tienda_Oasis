@@ -1,5 +1,5 @@
 <template>
-    <v-card>
+    <v-card class="product-container">
       <v-tabs
         v-model="tab"
         align-tabs="center"
@@ -25,14 +25,16 @@
   </template>
   <script setup>
     import { ref } from 'vue'
-import Programs from './items/Programs.vue';
-import Books from './items/Books.vue';
-import Curses from './items/Videos.vue'
+    import Programs from './items/Programs.vue';
+    import Books from './items/Books.vue';
+    import Curses from './items/Videos.vue'
   
     const tab = ref(null)
   </script>
 
-  <style scoped>
-    
-
+  <style>
+    .v-card{
+      position:sticky;
+      z-index: auto !important;
+    }
   </style>

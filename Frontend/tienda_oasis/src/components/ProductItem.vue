@@ -1,14 +1,14 @@
 <template>
     <v-card
+      class="product-item mx-auto my-12"
       :disabled="loading"
       :loading="loading"
-      class="product-item mx-auto my-12"
       max-width="250"
     >
       <template v-slot:loader="{ isActive }">
         <v-progress-linear
           :active="isActive"
-          color="deep-purple"
+          color="#0030F0"
           height="4"
           indeterminate
         ></v-progress-linear>
@@ -33,23 +33,7 @@
       </v-card-item>
   
       <v-card-text>
-        <v-row
-          align="center"
-          class="mx-0"
-        >
-          <v-rating
-            :model-value="rating"
-            color="amber"
-            density="compact"
-            size="small"
-            half-increments
-            readonly
-          ></v-rating>
-  
-          <div class="text-grey ms-4">
-            {{ rating }}
-          </div>
-        </v-row>
+        <Rating :rating="rating"></Rating>
   
         <div class="my-4 text-subtitle-1">
           $: {{ price }}
@@ -58,21 +42,22 @@
         <div>{{ description }}</div>
       </v-card-text>
   
-      <v-divider class="mx-4 mb-1"></v-divider>
+      <v-divider class="color-blue mx-4 mb-1"></v-divider>
   
   
       <v-card-actions>
         <v-btn
-          color="deep-purple-lighten-2"
+          class="reserve-btn"
           text="Reserve"
           block
-          border
+          
           @click="reserve"
         ></v-btn>
       </v-card-actions>
     </v-card>
   </template>
   <script>
+    import Rating from '@/components/Rating.vue';
     export default{
       props:{
         img: null,
@@ -96,15 +81,27 @@
           setTimeout(() => (loading.value = false), 200)
           
         }  
+      },
+      components:{
+        Rating
       }
     }
   </script>
 
   <style>
-    .product-item{
+    .v-card.product-item{
       margin: auto;
-      background-color: rgb(255, 255, 255);
-      box-shadow: 0 0  3px rgb(87, 87, 87);
+      box-shadow: 0 0 3px #0032FA;
+    }
+    .v-divider.color-blue{
+      color: #0030F0;
+      opacity: 1;
+    }
+    button.reserve-btn{
+      background-color: white;
+      color: #0030F0;
+      border-radius: 0.3em;
+      border: #0030F0 solid 1px;
     }
 
 </style>

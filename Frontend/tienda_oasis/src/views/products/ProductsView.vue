@@ -13,7 +13,7 @@ import ProductTable from '@/views/products/ProductTable.vue';
 <style>
 
     body{
-        background-color: rgb(156, 180, 180) !important;
+        background-color: rgb(255, 255, 255) !important;
     }
   
 </style>
