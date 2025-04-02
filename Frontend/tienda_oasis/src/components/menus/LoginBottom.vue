@@ -38,19 +38,17 @@ section{
 }
 
 .nav-btn{
-    width: auto;
-    margin-top: 1em;
-    margin-right: 1em;
+    margin: 0.3em 0.5em;
 }
 
 .primary{
-    background-color: rgba(0, 255, 0, 0.979);
+    background-color: rgba(0, 89, 255, 0.979);
     color: rgb(0, 0, 0);
 }
 
 .primary:hover{
     transition-duration: 0.3s;
-    background-color: rgb(43, 255, 0);
+    background-color: rgb(0, 119, 255);
     border: 1px solid rgb(0, 0, 0);
 }
 
@@ -60,7 +58,7 @@ section{
 }
 .second:hover{
     transition-duration: 0.3s;
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(217, 223, 222);
     border: 1px solid rgb(0, 0, 0);
 }
 </style>

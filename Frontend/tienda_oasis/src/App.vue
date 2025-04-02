@@ -1,22 +1,25 @@
 <template>
-    <RouterView />
+  <MainBar/>
+  <RouterView/>
 </template>
 
 <script>
-import NavBar from './components/menus/NavBar.vue';
-  export default {
+import MainBar from './components/menus/MainBar.vue';
+
+export default {
     data(){
       return {
 
       }
     },
-    components:[
-      NavBar,
-    ]
+    components:{
+      MainBar,
+    },
     
-  }
+    
+}
 </script>
-<style scoped>
+<style >
   .header{
     width: 100%;
     display: inline-flex;
@@ -29,6 +32,10 @@ import NavBar from './components/menus/NavBar.vue';
   }
   body{
     display: block;
+    width: 100%;
+    height: 100%;
+    border: none;
+    margin: 0;
   }
   .main-container{
     display: block;
