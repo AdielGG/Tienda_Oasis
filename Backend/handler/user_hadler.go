@@ -12,6 +12,7 @@ import (
 func CreateUser(c *gin.Context) {
 	user := models.User{}
 	err := c.ShouldBindJSON(&user)
+	user.ID = 43
 
 	if err != nil {
 		log.Println(err)

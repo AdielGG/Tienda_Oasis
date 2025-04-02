@@ -4,17 +4,29 @@ import (
 	conf "backend/config"
 	"backend/database"
 	"backend/handler"
+	"embed"
 	"fmt"
+	"net/http"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
+
+//go:embed resource
+var resource embed.FS
 
 func main() {
 
 	router := gin.New()
 	router.Use(gin.Recovery())
 	router.Use(cors.Default())
+
+	//Serve img files
+	router.StaticFS("/resource", http.FS(resource))
+	router.GET("/img/:filename", func(c *gin.Context) {
+		file, _ := resource.ReadFile("resource/img/" + c.Param("filename"))
+		c.Data(http.StatusOK, "image/jpg", file)
+	})
 
 	//handlers User
 	router.POST("/register", handler.CreateUser)
