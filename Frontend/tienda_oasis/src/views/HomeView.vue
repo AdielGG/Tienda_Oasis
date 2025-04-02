@@ -1,54 +1,74 @@
 <script setup>
-import NavBar from '@/components/menus/NavBar.vue';
+import Header from '@/components/Header.vue';
+import Carousel from '@/components/Carousel.vue';
+import ProductItem from '@/components/ProductItem.vue';
+import Footer from '@/components/Footer.vue';
 </script>
 
 <template>
   <main>
-    <video src="../assets/video.mp4" autoplay="true" muted="true" loop="true" ></video>
-    
-    <header class="header">
 
-      <h1> <b>Tienda Oasis</b> </h1>
-    </header>
-    
-    <NavBar />
+      <Header></Header>
+      <v-divider class="color-blue mx-4 mb-1 margin-top-2"></v-divider>
+  
+      <div class="title">
+        <h1>Nosotros Ofrecemos</h1>
+      </div>
+      
+      <Carousel></Carousel>
+  
+      <v-divider class="color-blue mx-4 mb-1 margin-top-2"></v-divider>
+      
+      <div class="title">
+        <h1>Productos Recientes</h1>
+      </div>
+      
+      <div class="content-items">
 
+        <ProductItem title="NuevoPeoducto" price="5" :rating="3" description="Nuevo proffucto a la tienda" img="src/assets/background.jpg" @click="console.log('hola')"/>
+        <ProductItem title="NuevoPeoducto" price="5" :rating="2" description="Nuevo proffucto a la tienda" img="src/assets/background.jpg"/>
+        <ProductItem title="NuevoPeoducto" price="5" :rating="4.5" description="Nuevo proffucto a la tienda" img="src/assets/oasis.png"/>
+        <ProductItem title="NuevoPeoducto" price="5" :rating="5" description="Nuevo proffucto a la tienda" img="src/assets/background.jpg"/>
+        <ProductItem title="NuevoPeoducto" price="5" :rating="4" description="Nuevo proffucto a la tienda" img="src/assets/background.jpg"/>
+      </div>
+      <v-divider class="color-blue mx-4 mb-1"></v-divider>
+        
+      <div class="title">
+        <h1>Más Vendidos</h1>
+      </div>
+      
+      <div class="content-items">
 
-  </main>
+          <ProductItem title="NuevoPeoducto" price="5" :rating="3" description="Nuevo proffucto a la tienda" img="src/assets/background.jpg" @click="console.log('hola')"/>
+          <ProductItem title="NuevoPeoducto" price="5" :rating="2" description="Nuevo proffucto a la tienda" img="src/assets/background.jpg"/>
+          <ProductItem title="NuevoPeoducto" price="5" :rating="5" description="Nuevo proffucto a la tienda" img="src/assets/background.jpg"/>
+          <ProductItem title="NuevoPeoducto" price="5" :rating="4" description="Nuevo proffucto a la tienda" img="src/assets/oasis.png"/>
+          <ProductItem title="NuevoPeoducto" price="5" :rating="4" description="Nuevo proffucto a la tienda" img="src/assets/background.jpg"/>
+      </div>
+
+      <Footer class="caca"></Footer>
+    </main>
 </template>
 
 
 <style scoped>
- 
-  .header{
-    background-color: rgba(13, 20, 20, 0);
-    width: 100%;
-    text-align: center;
-    
-  }
-
-  
-  .header h1{
-    
-    color: rgb(255, 255, 255);
-    font-size: 4em;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    text-shadow: 0 0 10px black;
-  }
-
-  main{
-    width: 100%;
-    height: 100%;
-    display: block;
-  }
-  
-  video {
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  min-width: 105%;
-  min-height: 100%;
-  transform: translateX(calc((100% - 100vw) / 2));
-  z-index: -2;
+.margin-top-2{
+  margin-top: 2em;
 }
+ .title{
+   text-align: center;
+   font-size: 2em ;
+   margin-top: 2em;
+   color: black;
+   font-family: 'Courier New', Courier, monospace;
+ }
+ 
+ .content-items{
+   display: flex;
+   flex-direction: row-reverse;
+   flex-wrap: wrap;
+   align-content: flex-start;
+   justify-content: flex-end; 
+ }
+
 </style>
