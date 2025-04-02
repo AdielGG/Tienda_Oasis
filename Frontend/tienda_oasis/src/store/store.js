@@ -1,30 +1,24 @@
-export default {
-    namespaced: true,
+import { createStore } from "vuex";
+import defaultValues from './defaultValues';
+
+export default createStore({
     state: {
-        user: null,
-        logued: false,
+        user: defaultValues.userDefault,
         drawer: false,
+        logged: false,
     },
     mutations: {
-        setUser(state, user){
+        setUser(state, user){            
             state.user = user;
         },
-        setLogued(state,logued){
-            state.logued = false
+        setDrawer(state, drawer){
+            state.drawer = drawer;
         },
-        setDrawer(state,drawer){
-            state.drawer = drawer
+        setLogged(state, logged){
+            state.logged = logged;
         }
     },
-    getters:{
-        getUser(state){
-            return state.user
-        },
-        getLogued(state){
-            return state.logued
-        },
-        getDrawer(state){
-            return state.drawer
+    actions: {  
+
         }
-    }
-}
+});
