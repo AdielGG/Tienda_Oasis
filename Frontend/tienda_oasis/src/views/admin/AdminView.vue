@@ -1,14 +1,17 @@
 <template>
   <main>
     <header>
-        <v-breadcrumbs :items="items">
+        <v-breadcrumbs :items="items" color="blue">
             <template v-slot:prepend>
-                <v-icon icon="$vuetify" size="small"></v-icon>
+                <v-icon icon="$vuetify" size="large" color="yellow"></v-icon>
             </template>
         </v-breadcrumbs>
     </header>  
 
     <v-sheet>
+        <v-btn @click="$router.push('/')">
+          Home
+        </v-btn>
         <v-btn>
             Gestionar Productos
         </v-btn>
