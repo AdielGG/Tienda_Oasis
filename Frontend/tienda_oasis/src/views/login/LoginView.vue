@@ -6,8 +6,7 @@
                 <img src="../../assets/oasis.png" alt="Logo"  class="logo">
             </div>
 
-            <v-card-title>
-                
+            <v-card-title>                
                 <v-row>
                     <v-col cols="12">
                         <v-text-field
@@ -18,6 +17,7 @@
                     </v-col>
                 </v-row>
             </v-card-title>
+
             <v-card-title>
                 <v-row>
                     <v-col cols="12">
@@ -31,6 +31,7 @@
                     </v-col>
                 </v-row>
             </v-card-title>
+            
             <section class="actions-container">
                 <button class="btn btn-primary" @click="login" :disabled="loading">
                     <span v-if="loading">Cargando...</span>
@@ -69,7 +70,6 @@
 
 <script>
 import axios from 'axios'
-import store from '@/store/store';
 export default {
     data() {
         return {
@@ -97,12 +97,13 @@ export default {
             }).then(response => {
 
                 
-                store.state.user = response.data.user
-                store.state.logued = true;
-                
+                this.$store.commit('setUser', response.data.user)
+                this.$store.commit('setLogged', true)
                 this.loading = false;
+                
+                console.log(this.$store.state.user.name)
 
-                if(store.state.user.role === 'admin'){
+                if(this.$store.state.user.role === 'admin'){
                     this.$router.push('/admin')
                 }
                 else{
@@ -114,17 +115,18 @@ export default {
                 console.log(error);
 
                 this.loading = false;
-                this.dialog = true;
- 
+                
                 this.errorText = error.message === 'Network Error' 
                                 ? 'No se Pudo conectar con el servidor' 
                                 : 'Usuario o contraseña incorrectos';
-
+                
                 this.ErrorTitle = error.name === "AxiosError" 
                                 ? 'Error del Servidor' 
                                 : 'Error';
-            })
-            
+                
+                this.dialog = true;
+                            })
+                            
             
         },
         validar(){
@@ -168,7 +170,8 @@ export default {
             }
             return true;
         }     
-    }
+    },
+    
 }
 </script>
 

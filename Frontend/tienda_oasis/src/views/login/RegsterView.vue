@@ -152,10 +152,18 @@ import store from '@/store/store';
                 this.loading = false;
                 console.log(response.data);
                 if(response.data.OK === 'Logued in successfully'){
-                    const {data} = await axios.get('http://localhost:8080/user/' + this.username)
-                    store.state.user = data.user
-                    store.state.logued = true;
+                    this.$store.commit('setUser', data.user)
+                    this.$store.commit('setLogged', true)
+                    this.loading = false;
+                
+                    console.log(this.$store.state.user.name)
+
+                if(this.$store.state.user.role === 'admin'){
+                    this.$router.push('/admin')
+                }
+                else{
                     this.$router.push('/')
+                }
                 }
             }).catch(error => {
                 
