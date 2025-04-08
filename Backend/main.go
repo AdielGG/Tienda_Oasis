@@ -28,7 +28,7 @@ func main() {
 		c.Data(http.StatusOK, "image/jpg", file)
 	})
 
-	//handlers User
+	//Endpoints User
 	router.POST("/register", handler.CreateUser)
 	router.GET("/user/:username", handler.GetUserByUserName)
 	router.POST("/login", handler.Login)
@@ -36,7 +36,7 @@ func main() {
 	// router.PUT("/user/:username", handler.UpdateUser)
 	// router.DELETE("/user/:username", handler.DeleteUser)
 
-	//handlers Product
+	//Endpoints Product
 	router.GET("/products", handler.GetAllProducts)
 	router.POST("/product", handler.CreateProduct)
 	router.GET("/products/:type", handler.GetProductByType)
@@ -44,7 +44,7 @@ func main() {
 	router.PUT("/product/:id", handler.UpdateProduct)
 	router.DELETE("/product/:id", handler.DeleteProduct)
 
-	//handlers Sugestion
+	//Endpoints Sugestion
 
 	router.POST("/suggestion", handler.CreateSugestion)
 	router.GET("/suggestions", handler.GetAllSugestions)
