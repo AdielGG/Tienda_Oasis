@@ -1,6 +1,6 @@
 <template>
     <v-container>
-      <form>
+      <form @submit.prevent="create">
           <v-card class="main-card">
               <div class="logo-container">
                   <img src="../../assets/oasis.png" alt="Logo"  class="logo">
@@ -116,117 +116,131 @@
   </template>
   
   <script>
-  import axios from 'axios'
-import store from '@/store/store';
-  export default {
-      data() {
-          return {
-              username: '',
-              password: '',
-              cpassword: '',
-              name: '',
-              lastname: '',
-              age: '',
-              email: '',
-              loading: false,
-              dialog: false,
-              errorText: '',
-              ErrorTitle: ''
-          }
-      },
-      methods: {
-          async create() {
-              this.loading = true;
-              if(!this.validar()){
-                  this.loading = false;
-                  return;
-              }
-            axios.post('http://localhost:8080/register', {
-                name: this.name,
-                lastname: this.lastname,
-                age: this.age.toString(),
-                email: this.email,
-                username: this.username,
-                password: this.password
-            }).then(async response => {
+import axios from 'axios';
+import { z } from 'zod';
+import { registerSchema } from '@/plugins/validationSchemas';
+
+export default {
+    data() {
+        return {
+            username: '',
+            password: '',
+            cpassword: '',
+            name: '',
+            lastname: '',
+            age: '',
+            email: '',
+            loading: false,
+            dialog: false,
+            errorText: '',
+            ErrorTitle: ''
+        }
+    },
+    methods: {
+        async create() {
+            this.loading = true;
+            
+            if(!this.validar()) {
+                this.loading = false;
+                return false;
+            }
+
+            try {
+                const response = await axios.post('http://localhost:8080/register', {
+                    name: this.name,
+                    lastname: this.lastname,
+                    age: this.age.toString(),
+                    email: this.email,
+                    username: this.username,
+                    password: this.password
+                });
+
                 this.loading = false;
                 console.log(response.data);
-                if(response.data.OK === 'Logued in successfully'){
-                    this.$store.commit('setUser', data.user)
-                    this.$store.commit('setLogged', true)
-                    this.loading = false;
                 
-                    console.log(this.$store.state.user.name)
-
-                if(this.$store.state.user.role === 'admin'){
-                    this.$router.push('/admin')
+                if(response.data.OK === 'Logued in successfully') {
+                    this.$store.commit('setUser', response.data.user);
+                    this.$store.commit('setLogged', true);
+                    
+                    if(this.$store.state.user.role === 'admin') {
+                        this.$router.push('/admin');
+                    } else {
+                        this.$router.push('/');
+                    }
                 }
-                else{
-                    this.$router.push('/')
-                }
-                }
-            }).catch(error => {
                 
+                return true;
+                
+            } catch (error) {
                 console.log(error);
                 this.loading = false;
                 this.dialog = true;
- 
+                
                 this.errorText = error.message === 'Network Error' 
-                                ? 'No se Pudo conectar con el servidor' 
-                                : 'Usuario o contraseña incorrectos';
-
+                                ? 'No se pudo conectar con el servidor' 
+                                : error.response?.data?.message || 'Error al registrar usuario';
+                
                 this.ErrorTitle = error.name === "AxiosError" 
                                 ? 'Error del Servidor' 
                                 : 'Error';
-            })
-              
-          },
-          validar(){
-              if(this.username === '' || this.password === ''){
-                  this.dialog = true;
-                  this.errorText = 'El usuario o la contraseña no puede estar vacio';
-                  this.ErrorTitle = 'Campos requeridos';
-                  return false;
-              }
-              if(this.password !== this.cpassword){
-                  this.dialog = true;
-                  this.errorText = 'Las contraseñas no coinciden';
-                  this.ErrorTitle = 'Contraseñas no coinciden';
-                  return false;
-              }
-              if(this.age < 18){
-                  this.dialog = true;
-                  this.errorText = 'Debes ser mayor de edad';
-                  this.ErrorTitle = 'Debes ser mayor de edad';
-                  return false;
-              }
-              if(this.username.length < 4 || this.password.length < 4){
-                  this.dialog = true;
-                  this.errorText = 'El usuario o la contraseña debe tener al menos 4 caracteres';
-                  this.ErrorTitle = 'Longitud minimo';
-                  return false;
-              }
-              if(this.username.length > 20 || this.password.length > 20){
-                  this.dialog = true;
-                  this.errorText = 'El usuario o la contraseña debe tener al menos 20 caracteres';
-                  this.ErrorTitle = 'Longitud maximo';
-                  return false;
-              }
-              for(let i = 0; i < this.username.length; i++){
-                  if(!this.username[i].match(/[a-zA-Z]/)){
-                      this.dialog = true;
-                      this.errorText = 'El usuario solo puede contener letras';
-                      this.ErrorTitle = 'Caracteres no permitidos';
-                      return false;
-                  }
-              }
-              return true;
-          }     
-      }
-  }
-  </script>
+                
+                return false;
+            }
+        },
+        validar() {
+            try {
+                // Convertir age a número para la validación
+                const ageNumber = parseInt(this.age);
+                
+                registerSchema.parse({
+                    name: this.name,
+                    lastname: this.lastname,
+                    age: isNaN(ageNumber) ? 0 : ageNumber, // Manejar caso no numérico
+                    email: this.email,
+                    username: this.username,
+                    password: this.password,
+                    cpassword: this.cpassword
+                });
+                
+                return true;
+                
+            } catch (error) {
+                if (error instanceof z.ZodError) {
+                    // Manejar el primer error encontrado
+                    const firstError = error.errors[0];
+                    
+                    this.dialog = true;
+                    this.errorText = firstError.message;
+                    
+                    // Asignar título según el tipo de error
+                    if (firstError.code === 'too_small') {
+                        this.ErrorTitle = 'Longitud mínimo';
+                    } else if (firstError.code === 'too_big') {
+                        this.ErrorTitle = 'Longitud máximo';
+                    } else if (firstError.code === 'invalid_string') {
+                        this.ErrorTitle = 'Caracteres no permitidos';
+                    } else if (firstError.code === 'invalid_type') {
+                        this.ErrorTitle = 'Tipo de dato incorrecto';
+                    } else if (firstError.path.includes('cpassword')) {
+                        this.ErrorTitle = 'Contraseñas no coinciden';
+                    } else {
+                        this.ErrorTitle = 'Error de validación';
+                    }
+                } else {
+                    // Otros tipos de errores
+                    this.dialog = true;
+                    this.errorText = 'Error desconocido';
+                    this.ErrorTitle = 'Error';
+                }
+                
+                return false;
+            }
+        }
+    }
+}
+</script>
   
-  <style scpoed>
+  <style scoped>
   .logo-container{
       display: flex;
       justify-content: center;
