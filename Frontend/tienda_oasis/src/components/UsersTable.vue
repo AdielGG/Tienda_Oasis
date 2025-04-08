@@ -1,7 +1,9 @@
 <template>
+    <div>
     <table class="table">
         <colgroup>
             <col class="col-star" />
+            <col />
             <col />
             <col />
             <col class="col-end" />
@@ -11,6 +13,7 @@
                 <th class="row-start">Nombre</th>
                 <th>Usuario</th>
                 <th>Correo</th>
+                <th>Rol</th>
                 <th class="row-end">Acciones</th>
             </tr>
         </thead>
@@ -19,6 +22,7 @@
                 <td class="row-start">Antonio Malanga Grande</td>
                 <td>antonio</td>
                 <td>an.grande@correo.co</td>
+                <td>Administrador</td>
                 <td class="row-end">
                     <v-btn variant="text" color="primary">
                         <v-icon
@@ -38,6 +42,7 @@
                 <td class="row-start">Antonio Malanga Grande</td>
                 <td>antonio</td>
                 <td>an.grande@correo.co</td>
+                <td>Administrador</td>
                 <td class="row-end">
                     <v-btn variant="text" color="primary">
                         <v-icon
@@ -57,6 +62,7 @@
                 <td class="row-start">Antonio Malanga Grande</td>
                 <td>antonio</td>
                 <td>an.grande@correo.co</td>
+                <td>Cliente</td>
                 <td class="row-end">
                     <v-btn variant="text" color="primary">
                         <v-icon
@@ -81,6 +87,7 @@
             :total-visible="5"
         ></v-pagination>
     </div>
+</div>
 </template>
 <script>
 export default {

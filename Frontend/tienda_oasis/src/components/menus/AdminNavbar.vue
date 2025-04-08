@@ -12,11 +12,12 @@
                         title="Dashboard"
                     ></v-list-item>
                     <v-divider></v-divider>
-                    <v-list-item>
-                        <router-link to="/admin/users" class="item-link"
-                            >Productos</router-link
-                        >
-                    </v-list-item>
+                    <v-list-item
+                        link
+                        @click="adminUsers"
+                        prepend-icon="mdi-account-group"
+                        title="Usuarios"
+                    ></v-list-item>
                     <v-list-item
                         link
                         @click="adminProducts"
@@ -95,12 +96,5 @@ export default {
     background-color: #fff;
     margin-bottom: 0.5em;
 }
-.v-list-item__content {
-    width: 100%;
-    height: 100%;
-}
-.item-link {
-    width: 100%;
-    height: 100%;
-}
+
 </style>

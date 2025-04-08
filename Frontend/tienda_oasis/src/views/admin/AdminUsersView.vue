@@ -1,6 +1,20 @@
 <template>
     <AdminNavBar>
         <slot>
+            <div class="text-center">
+                <h1>Usuarios</h1>
+            </div>
+            <v-fab
+                key="absolute"
+                app
+                color='primary'
+                location="bottom center"
+                size="large"
+                @click="AddUser"
+            >
+                <v-icon>mdi-plus</v-icon>
+                Nuevo Usuario
+            </v-fab>
             <UsersTable> </UsersTable>
         </slot>
     </AdminNavBar>
@@ -17,17 +31,16 @@ export default {
         };
     },
     mounted() {
-        this.getUsers();
+        // this.getUsers();
     },
     components: {
         AdminNavBar,
         UsersTable,
     },
-    methosd: {
-        getUsers() {
-            this.users = async () => {
-                return await axios.get("localhost:8080/users");
-            };
+    methods: {
+        
+        AddUser() {
+            this.$router.push("/admin/users/add");
         },
     },
 };
