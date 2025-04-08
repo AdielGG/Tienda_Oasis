@@ -4,37 +4,76 @@
             <div class="text-center">
                 <h1>Nuevo Producto</h1>
             </div>
-            <v-form>
+            <v-form @submit.prevent="addProduct">
                 <div class="input-pair">
-                    <v-text-field label="Nombre" v-model="nombre"></v-text-field>
-                    <v-text-field label="Descripción" v-model="descripcion"></v-text-field>
-
+                    <v-text-field 
+                      label="Nombre" 
+                      v-model="nombre"
+                      :error-messages="nombreErrors"
+                    ></v-text-field>
+                    <v-text-field 
+                      label="Descripción" 
+                      v-model="descripcion"
+                      :error-messages="descripcionErrors"
+                    ></v-text-field>
                 </div>
                 <div class="input-pair">
-
-                    <v-text-field label="Precio" v-model="precio"></v-text-field>
-                    <v-text-field label="Cantidad" v-model="cantidad"></v-text-field>
+                    <v-text-field 
+                      label="Precio" 
+                      v-model="precio"
+                      type="number"
+                      step="0.01"
+                      :error-messages="precioErrors"
+                    ></v-text-field>
+                    <v-text-field 
+                      label="Cantidad" 
+                      v-model="cantidad"
+                      type="number"
+                      :error-messages="cantidadErrors"
+                    ></v-text-field>
                 </div>
                 <div class="text-center aling-items-center">
-                    <img src="../../assets/background.jpg" cover width="300px"/>
+                    <img 
+                      v-if="imagen" 
+                      :src="previewImage" 
+                      width="300px"
+                      style="max-height: 200px; object-fit: contain;"
+                    />
                     <v-file-input
-                    :rules="rules"
-                    accept="image/png, image/jpeg, image/bmp"
-                    label="Imagen"
-                    placeholder="Selecciona una imagen"
-                    prepend-icon="mdi-camera"
-                    v-model="imagen"
-                    width="50%"
+                      accept="image/png, image/jpeg, image/bmp"
+                      label="Imagen"
+                      placeholder="Selecciona una imagen"
+                      prepend-icon="mdi-camera"
+                      v-model="imagen"
+                      @change="onFileChange"
+                      :error-messages="imagenErrors"
                     ></v-file-input>
-                    <v-btn color="primary" @click="addProduct">Agregar</v-btn>
+                    <v-btn 
+                      color="primary" 
+                      @click="addProduct"
+                      :loading="loading"
+                    >
+                      {{ loading ? 'Procesando...' : 'Agregar' }}
+                    </v-btn>
                 </div>
             </v-form>
+            
+            <v-dialog v-model="dialog" width="auto">
+                <v-card max-width="400" :title="ErrorTitle" :text="errorText">
+                    <template v-slot:actions>
+                        <v-btn class="ms-auto" text="Ok" @click="dialog = false"></v-btn>
+                    </template>
+                </v-card>
+            </v-dialog>
         </slot>
     </AdminNavbar>
 </template>
 
 <script>
 import AdminNavbar from '@/components/menus/AdminNavbar.vue';
+import { z } from 'zod';
+import { productSchema } from '@/plugins/validationSchemas';
+
 export default {
     components: {
         AdminNavbar
@@ -44,23 +83,85 @@ export default {
             nombre: "",
             descripcion: "",
             precio: "",
-            imagen: "@/assets/background.jpg",
+            imagen: null,
             cantidad: "",
-            rules: [
-                v => !!v || "Imagen es requerida",
-                v => v.size <= 2000000 || "El tamaño de la imagen no puede exceder de 2MB",
-            ],
+            dialog: false,
+            errorText: '',
+            ErrorTitle: '',
+            loading: false
         };
     },
     methods: {
-        addProduct() {
-            console.log(this.nombre);
-            console.log(this.descripcion);
-            console.log(this.precio);
-            console.log(this.cantidad);
-            console.log(this.imagen);
+        async addProduct() {
+            if (!this.validar()) {
+                return;
+            }
+
+            this.loading = true;
+            
+            try {
+                const formData = new FormData();
+                formData.append('nombre', this.nombre);
+                formData.append('descripcion', this.descripcion);
+                formData.append('precio', parseFloat(this.precio));
+                formData.append('cantidad', parseInt(this.cantidad));
+                formData.append('imagen', this.imagen);
+
+                const response = await axios.post('/api/products', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+
+                // Éxito - redirigir o limpiar formulario
+                this.$router.push('/admin/products');
+                
+            } catch (error) {
+                this.dialog = true;
+                this.errorText = 'Error al agregar el producto';
+                this.ErrorTitle = 'Error del servidor';
+                console.error(error);
+            } finally {
+                this.loading = false;
+            }
         },
-    },
+        validar() {
+            try {
+                // Convertir a números para validación
+                const precioNum = parseFloat(this.precio);
+                const cantidadNum = parseInt(this.cantidad);
+
+                productSchema.parse({
+                    nombre: this.nombre,
+                    descripcion: this.descripcion,
+                    precio: isNaN(precioNum) ? 0 : precioNum,
+                    cantidad: isNaN(cantidadNum) ? -1 : cantidadNum,
+                    imagen: this.imagen
+                });
+                
+                return true;
+                
+            } catch (error) {
+                if (error instanceof z.ZodError) {
+                    const firstError = error.errors[0];
+                    this.dialog = true;
+                    this.errorText = firstError.message;
+                    
+                    // Tipos de error comunes
+                    if (firstError.code === 'too_small') {
+                        this.ErrorTitle = 'Valor muy pequeño';
+                    } else if (firstError.code === 'too_big') {
+                        this.ErrorTitle = 'Valor muy grande';
+                    } else if (firstError.code === 'invalid_type') {
+                        this.ErrorTitle = 'Tipo de dato incorrecto';
+                    } else {
+                        this.ErrorTitle = 'Error de validación';
+                    }
+                }
+                return false;
+            }
+        }
+    }
 }
 </script>
 
