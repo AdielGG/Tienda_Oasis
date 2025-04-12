@@ -11,6 +11,7 @@
                     <router-link to="/products" class="nav-item">Productos</router-link>
                     <router-link to="/about" class="nav-item">Nosotros</router-link>
                     <router-link to="/about" class="nav-item">Ayuda</router-link>
+                    <router-link to="/faq" class="nav-item">FAQ</router-link>
                 </ul>
             </div>
         </nav>
