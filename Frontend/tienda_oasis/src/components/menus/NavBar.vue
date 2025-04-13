@@ -12,6 +12,7 @@
                     <router-link to="/about" class="nav-item">Nosotros</router-link>
                     <router-link to="/about" class="nav-item">Ayuda</router-link>
                     <router-link to="/faq" class="nav-item">FAQ</router-link>
+                    <router-link to="/quejas-sugerencias" class="nav-item">Quejas y sugerencias</router-link>
                 </ul>
             </div>
         </nav>

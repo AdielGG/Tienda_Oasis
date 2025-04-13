@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import QuejasSugerenciasView from "@/views/QuejasSugerenciasView.vue";
 import HomeView from "../views/HomeView.vue";
 import LoginView from "@/views/login/LoginView.vue";
 import RegisterView from "@/views/login/RegsterView.vue";
@@ -10,6 +11,8 @@ import AdminProductsView from "@/views/admin/AdminProductsView.vue";
 import AddUser from "@/views/admin/AddUser.vue";
 import AddProduct from "@/views/admin/AddProduct.vue";
 import FaqView from "@/views/FaqView.vue";
+import QuejasSugerencias from "@/components/QuejasSugerencias.vue";
+import AdminSugerencias from "@/views/admin/AdminSugerencias.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,6 +26,10 @@ const router = createRouter({
       path: "/faq",
       name: "faq",
       component: FaqView,
+    },{
+      path: "/quejas-sugerencias",
+      name: "quejas-sugerencias",
+      component: QuejasSugerenciasView,
     },
     {
       path: "/about",
@@ -53,6 +60,12 @@ const router = createRouter({
       path: "/admin/users",
       name: "users",
       component: AdminUsersView,
+    },
+    
+    {
+      path: "/admin/sugerencias",
+      name: "sugerencias",
+      component: AdminSugerencias,
     },
     {
       path: "/admin/users/add",

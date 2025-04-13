@@ -73,6 +73,10 @@ export default {
         adminUsers() {
             this.$router.push("/admin/users");
         },
+        
+        adminSugestions() {
+            this.$router.push("/admin/sugerencias");
+        },
     },
 };
 </script>
