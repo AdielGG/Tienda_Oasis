@@ -73,6 +73,9 @@ export default {
         adminUsers() {
             this.$router.push("/admin/users");
         },
+        adminSugestions() {
+            this.$router.push("/admin/suggestions");
+        },
     },
 };
 </script>
@@ -96,5 +99,4 @@ export default {
     background-color: #fff;
     margin-bottom: 0.5em;
 }
-
 </style>

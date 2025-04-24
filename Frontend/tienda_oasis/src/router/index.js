@@ -9,6 +9,8 @@ import AdminUsersView from "@/views/admin/AdminUsersView.vue";
 import AdminProductsView from "@/views/admin/AdminProductsView.vue";
 import AddUser from "@/views/admin/AddUser.vue";
 import AddProduct from "@/views/admin/AddProduct.vue";
+import HelpView from "@/views/HelpView.vue";
+import SuggestionsView from "@/views/admin/SuggestionsView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,6 +41,11 @@ const router = createRouter({
       component: ProductsView,
     },
     {
+      path: "/help",
+      name: "ayuda",
+      component: HelpView,
+    },
+    {
       path: "/admin",
       name: "admin",
       component: AdminView,
@@ -62,6 +69,11 @@ const router = createRouter({
       path: "/admin/products/add",
       name: "add-products",
       component: AddProduct,
+    },
+    {
+      path: "/admin/suggestions",
+      name: "suggestions",
+      component: SuggestionsView,
     },
   ],
 });
