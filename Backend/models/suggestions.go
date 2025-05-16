@@ -1,6 +1,6 @@
 package models
 
-type Sugestion struct {
+type Suggestion struct {
 	Id          int    `json: "id" gorm:"primary_key"`
 	UserId      int    `json: "user_id" gorm:"not null"`
 	Type        string `json: "type" gorm:"not null"`

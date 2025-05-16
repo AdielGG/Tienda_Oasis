@@ -4,59 +4,59 @@ import (
 	"backend/models"
 )
 
-func CreateSugestion(sugestion models.Sugestion) error {
+func CreateSuggestion(suggestion models.Suggestion) error {
 	db, err := ConnectDB()
 	if err != nil {
 		return err
 	}
-	return db.Create(&sugestion).Error
+	return db.Create(&suggestion).Error
 }
 
-func GetAllSugestions() ([]models.Sugestion, error) {
+func GetAllSuggestions() ([]models.Suggestion, error) {
 	db, err := ConnectDB()
 	if err != nil {
 		return nil, err
 	}
-	var sugestions []models.Sugestion
-	err = db.Find(&sugestions).Error
+	var suggestions []models.Suggestion
+	err = db.Find(&suggestions).Error
 	if err != nil {
 		return nil, err
 	}
-	return sugestions, nil
+	return suggestions, nil
 }
-func GetSugestion(id int) (models.Sugestion, error) {
+func GetSuggestion(id int) (models.Suggestion, error) {
 	db, err := ConnectDB()
 	if err != nil {
-		return models.Sugestion{}, err
+		return models.Suggestion{}, err
 	}
-	var sugestion models.Sugestion
-	err = db.First(&sugestion, id).Error
+	var suggestion models.Suggestion
+	err = db.First(&suggestion, id).Error
 	if err != nil {
-		return models.Sugestion{}, err
+		return models.Suggestion{}, err
 	}
-	return sugestion, nil
+	return suggestion, nil
 }
 
-func DeleteSugestions(id int) error {
+func DeleteSuggestions(id int) error {
 	db, err := ConnectDB()
 	if err != nil {
 		return err
 	}
-	return db.Delete(&models.Sugestion{}, id).Error
+	return db.Delete(&models.Suggestion{}, id).Error
 }
 
-func UpdateSugestion(sugestion models.Sugestion) error {
+func UpdateSuggestion(suggestion models.Suggestion) error {
 	db, err := ConnectDB()
 	if err != nil {
 		return err
 	}
-	return db.Save(&sugestion).Error
+	return db.Save(&suggestion).Error
 }
 
-func DeleteSugestion(id int) error {
+func DeleteSuggestion(id int) error {
 	db, err := ConnectDB()
 	if err != nil {
 		return err
 	}
-	return db.Delete(&models.Sugestion{}, id).Error
+	return db.Delete(&models.Suggestion{}, id).Error
 }

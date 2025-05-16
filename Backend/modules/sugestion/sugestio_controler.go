@@ -1,4 +1,4 @@
-package handler
+package suggestions
 
 import (
 	"backend/database"
@@ -10,33 +10,33 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func CreateSugestion(c *gin.Context) {
-	var sugestion models.Sugestion
-	if err := c.ShouldBindJSON(&sugestion); err != nil {
+func CreateSuggestion(c *gin.Context) {
+	var suggestion models.Suggestion
+	if err := c.ShouldBindJSON(&suggestion); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	err := database.CreateSugestion(sugestion)
+	err := database.CreateSuggestion(suggestion)
 	if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusCreated, sugestion)
+	c.JSON(http.StatusCreated, suggestion)
 
 }
 
-func GetAllSugestions(c *gin.Context) {
-	sugestions, err := database.GetAllSugestions()
+func GetAllSuggestions(c *gin.Context) {
+	suggestions, err := database.GetAllSuggestions()
 	if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, sugestions)
+	c.JSON(http.StatusOK, suggestions)
 }
 
-func GetSugestion(c *gin.Context) {
+func GetSuggestion(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		log.Println(err)
@@ -44,46 +44,46 @@ func GetSugestion(c *gin.Context) {
 		return
 	}
 
-	sugestion, err := database.GetSugestion(id)
+	suggestion, err := database.GetSuggestion(id)
 	if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, sugestion)
+	c.JSON(http.StatusOK, suggestion)
 }
 
-func UpdateSugestion(c *gin.Context) {
-	var sugestion models.Sugestion
+func UpdateSuggestion(c *gin.Context) {
+	var suggestion models.Suggestion
 
-	err := c.ShouldBindJSON(&sugestion)
+	err := c.ShouldBindJSON(&suggestion)
 	if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	err = database.UpdateSugestion(sugestion)
+	err = database.UpdateSuggestion(suggestion)
 
 	if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, sugestion)
+	c.JSON(http.StatusOK, suggestion)
 }
 
-func DeleteSugestion(c *gin.Context) {
+func DeleteSuggestion(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	err = database.DeleteSugestion(id)
+	err = database.DeleteSuggestion(id)
 	if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "Sugestion deleted successfully"})
+	c.JSON(http.StatusOK, gin.H{"message": "Suggestion deleted successfully"})
 }
