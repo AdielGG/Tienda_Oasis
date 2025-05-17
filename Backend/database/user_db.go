@@ -2,6 +2,7 @@ package database
 
 import (
 	"backend/models"
+	"fmt"
 )
 
 func CreateUser(user models.User) error {
@@ -19,6 +20,20 @@ func GetUser(id int) (models.User, error) {
 	}
 	var user models.User
 	err = db.First(&user, id).Error
+	if err != nil {
+		return models.User{}, err
+	}
+	return user, nil
+}
+
+func GetUserByUserName(username string) (models.User, error) {
+	db, err := ConnectDB()
+	if err != nil {
+		return models.User{}, err
+	}
+	var user models.User
+
+	err = db.Where(fmt.Sprintf("username = '%s'", username)).First(&user).Error
 	if err != nil {
 		return models.User{}, err
 	}

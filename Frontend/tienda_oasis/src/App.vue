@@ -1,30 +1,51 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <MainBar/>
+  <RouterView/>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import MainBar from './components/menus/MainBar.vue';
 
-nav {
-  padding: 30px;
-}
+export default {
+    data(){
+      return {
 
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
+      }
+    },
+    components:{
+      MainBar,
+    },
+    
+    
 }
-
-nav a.router-link-exact-active {
-  color: #42b983;
-}
+</script>
+<style >
+  .header{
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    /* align-content: center; */
+    /* display: inline-block; */
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
+  body{
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: none;
+    margin: 0;
+  }
+  .main-container{
+    display: block;
+    width: auto;
+    height: auto;
+    align-content: center;
+    align-items: center;
+    
+  }
+  .title{
+    font-family: 'Courier New', Courier, monospace;
+  }
 </style>
