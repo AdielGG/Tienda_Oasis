@@ -6,20 +6,12 @@ import (
 )
 
 func CreateUser(user models.User) error {
-	db, err := ConnectDB()
-	if err != nil {
-		return err
-	}
-	return db.Create(&user).Error
+	return DB.Create(&user).Error
 }
 
 func GetUser(id int) (models.User, error) {
-	db, err := ConnectDB()
-	if err != nil {
-		return models.User{}, err
-	}
 	var user models.User
-	err = db.First(&user, id).Error
+	err := DB.First(&user, id).Error
 	if err != nil {
 		return models.User{}, err
 	}
@@ -27,13 +19,9 @@ func GetUser(id int) (models.User, error) {
 }
 
 func GetUserByUserName(username string) (models.User, error) {
-	db, err := ConnectDB()
-	if err != nil {
-		return models.User{}, err
-	}
 	var user models.User
 
-	err = db.Where(fmt.Sprintf("username = '%s'", username)).First(&user).Error
+	err := DB.Where(fmt.Sprintf("username = '%s'", username)).First(&user).Error
 	if err != nil {
 		return models.User{}, err
 	}
@@ -41,12 +29,8 @@ func GetUserByUserName(username string) (models.User, error) {
 }
 
 func GetAllUsers() ([]models.User, error) {
-	db, err := ConnectDB()
-	if err != nil {
-		return nil, err
-	}
 	var users []models.User
-	err = db.Find(&users).Error
+	err := DB.Find(&users).Error
 	if err != nil {
 		return nil, err
 	}
@@ -54,17 +38,9 @@ func GetAllUsers() ([]models.User, error) {
 }
 
 func UpdateUser(user models.User) error {
-	db, err := ConnectDB()
-	if err != nil {
-		return err
-	}
-	return db.Save(&user).Error
+	return DB.Save(&user).Error
 }
 
 func DeleteUser(id int) error {
-	db, err := ConnectDB()
-	if err != nil {
-		return err
-	}
-	return db.Delete(&models.User{}, id).Error
+	return DB.Delete(&models.User{}, id).Error
 }

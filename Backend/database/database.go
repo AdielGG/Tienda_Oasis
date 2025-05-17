@@ -9,7 +9,18 @@ import (
 	"gorm.io/gorm"
 )
 
-func ConnectDB() (*gorm.DB, error) {
+var DB *gorm.DB
+var er error
+
+func InitDB() {
+	DB, er = CreateDB()
+
+	if er != nil {
+		panic(er)
+	}
+}
+
+func CreateDB() (*gorm.DB, error) {
 
 	dbURL := "host=" + cfg.DbConfig.Host + " port=" + cfg.DbConfig.Port + " user=" + cfg.DbConfig.User + " password=" + cfg.DbConfig.Password + " dbname=" + cfg.DbConfig.Database
 	fmt.Println(dbURL + " \n\n\n")
@@ -17,18 +28,22 @@ func ConnectDB() (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
-	return db, nil
-}
 
-func CreateDB() error {
-	db, err := ConnectDB()
+	err = db.AutoMigrate(&models.User{})
 	if err != nil {
-		return err
+		return nil, err
 	}
-	err1 := db.AutoMigrate(&models.User{})
-	err2 := db.AutoMigrate(&models.Product{})
-	if err1 != nil || err2 != nil {
-		return err1
+
+	err = db.AutoMigrate(&models.Product{})
+	if err != nil {
+		return nil, err
 	}
-	return err1
+
+	err = db.AutoMigrate(&models.Suggestion{})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return db, nil
 }

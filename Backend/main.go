@@ -2,7 +2,7 @@ package main
 
 import (
 	conf "backend/config"
-	database "backend/database"
+	"backend/database"
 	auth "backend/modules/auth"
 	products "backend/modules/product"
 	suggestions "backend/modules/suggestions"
@@ -25,6 +25,8 @@ func main() {
 	router.Use(gin.Recovery())
 	router.Use(cors.Default())
 
+	database.InitDB()
+
 	router.StaticFS("/resource", http.FS(resource))
 
 	//Serve resource files
@@ -41,7 +43,6 @@ func main() {
 
 	//Iniciar Base de Datos
 	conf.InitDatabaseConfig()
-	database.CreateDB()
 
 	//Iniciar Servidor
 	router.Run(conf.ServerHost + ":" + conf.ServerPort)
