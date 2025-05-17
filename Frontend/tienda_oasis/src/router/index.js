@@ -1,25 +1,81 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-
-const routes = [
-  {
-    path: '/',
-    name: 'home',
-    component: HomeView
-  },
-  {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  }
-]
+import { createRouter, createWebHistory } from "vue-router";
+import HomeView from "../views/HomeView.vue";
+import LoginView from "@/views/login/LoginView.vue";
+import RegisterView from "@/views/login/RegsterView.vue";
+import AboutView from "@/views/AboutView.vue";
+import ProductsView from "@/views/products/ProductsView.vue";
+import AdminView from "@/views/admin/AdminView.vue";
+import AdminUsersView from "@/views/admin/AdminUsersView.vue";
+import AdminProductsView from "@/views/admin/AdminProductsView.vue";
+import AddUser from "@/views/admin/AddUser.vue";
+import AddProduct from "@/views/admin/AddProduct.vue";
+import HelpView from "@/views/HelpView.vue";
+import SuggestionsView from "@/views/admin/SuggestionsView.vue";
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
-  routes
-})
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes: [
+    {
+      path: "/",
+      name: "home",
+      component: HomeView,
+    },
+    {
+      path: "/about",
+      name: "about",
+      component: AboutView,
+    },
+    {
+      path: "/register",
+      name: "register",
+      component: RegisterView,
+    },
+    {
+      path: "/login",
+      name: "login",
+      component: LoginView,
+    },
+    {
+      path: "/products",
+      name: "products",
+      component: ProductsView,
+    },
+    {
+      path: "/help",
+      name: "ayuda",
+      component: HelpView,
+    },
+    {
+      path: "/admin",
+      name: "admin",
+      component: AdminView,
+    },
+    {
+      path: "/admin/users",
+      name: "users",
+      component: AdminUsersView,
+    },
+    {
+      path: "/admin/users/add",
+      name: "add-users",
+      component: AddUser,
+    },
+    {
+      path: "/admin/products",
+      name: "admin-products",
+      component: AdminProductsView,
+    },
+    {
+      path: "/admin/products/add",
+      name: "add-products",
+      component: AddProduct,
+    },
+    {
+      path: "/admin/suggestions",
+      name: "suggestions",
+      component: SuggestionsView,
+    },
+  ],
+});
 
-export default router
+export default router;

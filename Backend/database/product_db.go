@@ -5,20 +5,15 @@ import (
 )
 
 func CreateProduct(product models.Product) error {
-	db, err := ConnectDB()
-	if err != nil {
-		return err
-	}
-	return db.Create(&product).Error
+	return DB.Create(&product).Error
 }
 
 func GetProduct(id int) (models.Product, error) {
-	db, err := ConnectDB()
-	if err != nil {
-		return models.Product{}, err
-	}
+
 	var product models.Product
-	err = db.First(&product, id).Error
+
+	err := DB.First(&product, id).Error
+
 	if err != nil {
 		return models.Product{}, err
 	}
@@ -26,12 +21,9 @@ func GetProduct(id int) (models.Product, error) {
 }
 
 func GetAllProducts() ([]models.Product, error) {
-	db, err := ConnectDB()
-	if err != nil {
-		return nil, err
-	}
 	var products []models.Product
-	err = db.Find(&products).Error
+
+	err := DB.Find(&products).Error
 	if err != nil {
 		return nil, err
 	}
@@ -39,17 +31,33 @@ func GetAllProducts() ([]models.Product, error) {
 }
 
 func UpdateProduct(product models.Product) error {
-	db, err := ConnectDB()
-	if err != nil {
-		return err
-	}
-	return db.Save(&product).Error
+
+	return DB.Save(&product).Error
 }
 
 func DeleteProduct(id int) error {
-	db, err := ConnectDB()
+
+	return DB.Delete(&models.Product{}, id).Error
+}
+
+func GetProductByType(Type string) (models.Product, error) {
+
+	var product models.Product
+
+	err := DB.Where("type = ?", Type).First(&product).Error
 	if err != nil {
-		return err
+		return models.Product{}, err
 	}
-	return db.Delete(&models.Product{}, id).Error
+	return product, nil
+}
+
+func GetProductByCategory(Category string) (models.Product, error) {
+
+	var product models.Product
+
+	err := DB.Where("category = ?", Category).First(&product).Error
+	if err != nil {
+		return models.Product{}, err
+	}
+	return product, nil
 }
