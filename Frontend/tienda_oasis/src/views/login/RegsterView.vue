@@ -146,7 +146,7 @@ export default {
             }
 
             try {
-                const response = await axios.post('http://localhost:8080/register', {
+                const response = await axios.post('http://localhost:8080/auth/register', {
                     name: this.name,
                     lastname: this.lastname,
                     age: this.age.toString(),
@@ -158,15 +158,40 @@ export default {
                 this.loading = false;
                 console.log(response.data);
                 
-                if(response.data.OK === 'Logued in successfully') {
-                    this.$store.commit('setUser', response.data.user);
+
+                if(response.data.OK ) {
+                    try {
+                    const res = await axios.post('http://localhost:8080/auth/login', {
+                        username: this.username,
+                        password: this.password
+                    });
+
+                    console.log(res);
+
+                    this.$store.commit('setUser', res.data.user);
                     this.$store.commit('setLogged', true);
-                    
-                    if(this.$store.state.user.role === 'admin') {
+                    this.loading = false;
+
+                    if(this.$store.state.user.role === 'admin'){
                         this.$router.push('/admin');
                     } else {
                         this.$router.push('/');
                     }
+                    } catch (error) {
+                        console.log(error);
+                        this.loading = false;
+                        
+                        this.errorText = error.message === 'Network Error' 
+                                        ? 'No se Pudo conectar con el servidor' 
+                                        : 'Usuario o contraseña incorrectos';
+                        
+                        this.ErrorTitle = error.name === "AxiosError" 
+                                        ? 'Error del Servidor' 
+                                        : 'Error';
+                        
+                        this.dialog = true;
+                    }
+        
                 }
                 
                 return true;

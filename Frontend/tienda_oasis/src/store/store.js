@@ -6,6 +6,7 @@ export default createStore({
         user: defaultValues.userDefault,
         drawer: false,
         logged: false,
+        menu: false,
     },
     mutations: {
         setUser(state, user){            

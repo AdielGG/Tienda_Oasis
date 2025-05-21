@@ -39,5 +39,15 @@ export default {
     flex-wrap: wrap;
     flex-direction: row;
 }
+@media (max-width: 768px) {
+    .site-title{
+        font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+		font-size: 2em;
+		padding: 1em 2em 0 2em;
+
+    }
+    
+    
+}
 
 </style>

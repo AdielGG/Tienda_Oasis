@@ -93,10 +93,12 @@ export default {
             }
 
             try {
-                const response = await axios.post('http://localhost:8080/login', {
+                const response = await axios.post('http://localhost:8080/auth/login', {
                     username: this.username,
                     password: this.password
                 });
+
+                console.log(response);
 
                 this.$store.commit('setUser', response.data.user);
                 this.$store.commit('setLogged', true);
