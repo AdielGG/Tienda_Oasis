@@ -13,7 +13,7 @@
                 @click="AddProduct"
             >
                 <v-icon>mdi-plus</v-icon>
-                Agregar Producto
+                <AddProduct></AddProduct>
             </v-fab>
             <ProductTable> </ProductTable>
             
@@ -23,6 +23,7 @@
 <script>
 import AdminNavbar from "@/components/menus/AdminNavbar.vue";
 import ProductTable from "@/components/ProductsTable.vue";
+import AddProduct from "./AddProduct.vue";
 
 export default {
     name: "AdminProductsView",
@@ -34,6 +35,7 @@ export default {
     components: {
         AdminNavbar,
         ProductTable,
+        AddProduct
     },
     methods: {
         AddProduct() {

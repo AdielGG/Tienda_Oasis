@@ -1,8 +1,10 @@
 <template>
-    
-    <NavBar/>
+    <header class="tm-site-header">
+       
+        <NavBar></NavBar>
+    </header> 
     <ProductTable></ProductTable>
-
+    
 </template>
 
 <script setup>

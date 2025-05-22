@@ -1,5 +1,6 @@
 import { createStore } from "vuex";
 import defaultValues from './defaultValues';
+import { set } from "zod";
 
 export default createStore({
     state: {
@@ -7,6 +8,8 @@ export default createStore({
         drawer: false,
         logged: false,
         menu: false,
+        img_product: null,
+        file: null,
     },
     mutations: {
         setUser(state, user){            
@@ -17,7 +20,14 @@ export default createStore({
         },
         setLogged(state, logged){
             state.logged = logged;
+        },
+        setImgProduct(state, img_product){
+            state.img_product = img_product;
+        },
+        setFile(state, file){
+            state.file = file;
         }
+
     },
     actions: {  
 

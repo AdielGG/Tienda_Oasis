@@ -1,6 +1,7 @@
 <template>
-    <AdminNavbar>
-        <slot>
+    <v-overlay class="align-center justify-center" activator="parent">
+        <div class="overlay-items-content">
+
             <div class="text-center">
                 <h1>Nuevo Producto</h1>
             </div>
@@ -32,27 +33,22 @@
                       :error-messages="cantidadErrors"
                     ></v-text-field>
                 </div>
+                <div class="input-pair">
+                    
+                </div>
+                <div class="input-pair">
+                    <AddImg></AddImg>
+                    <AddFiles></AddFiles>
+                </div>
+
                 <div class="text-center aling-items-center">
-                    <img 
-                      v-if="imagen" 
-                      :src="previewImage" 
-                      width="300px"
-                      style="max-height: 200px; object-fit: contain;"
-                    />
-                    <v-file-input
-                      accept="image/png, image/jpeg, image/bmp"
-                      label="Imagen"
-                      placeholder="Selecciona una imagen"
-                      prepend-icon="mdi-camera"
-                      v-model="imagen"
-                      @change="onFileChange"
-                      :error-messages="imagenErrors"
-                    ></v-file-input>
-                    <v-btn 
+                    
+                      <v-btn 
+                      style="margin-bottom: 1em;"
                       color="primary" 
                       @click="addProduct"
                       :loading="loading"
-                    >
+                      >
                       {{ loading ? 'Procesando...' : 'Agregar' }}
                     </v-btn>
                 </div>
@@ -61,22 +57,27 @@
             <v-dialog v-model="dialog" width="auto">
                 <v-card max-width="400" :title="ErrorTitle" :text="errorText">
                     <template v-slot:actions>
-                        <v-btn class="ms-auto" text="Ok" @click="dialog = false"></v-btn>
+                        <v-btn class="ms-auto"  text="Ok" @click="dialog = false"></v-btn>
                     </template>
                 </v-card>
             </v-dialog>
-        </slot>
-    </AdminNavbar>
+        </div>
+    </v-overlay>
 </template>
 
 <script>
 import AdminNavbar from '@/components/menus/AdminNavbar.vue';
+import AddImg from '@/components/AddImg.vue';
+import AddFiles from '@/components/AddFiles.vue';
 import { z } from 'zod';
 import { productSchema } from '@/plugins/validationSchemas';
 
+
 export default {
     components: {
-        AdminNavbar
+        AdminNavbar,
+        AddImg,
+        AddFiles
     },
     data() {
         return {
@@ -88,8 +89,14 @@ export default {
             dialog: false,
             errorText: '',
             ErrorTitle: '',
-            loading: false
+            loading: false,
+            file: null,
         };
+    },
+    watch:{
+        files(newValue){
+            console.log(newValue);
+        }
     },
     methods: {
         async addProduct() {
@@ -97,6 +104,7 @@ export default {
                 return;
             }
 
+            console.log(this.imagen);
             this.loading = true;
             
             try {
@@ -105,12 +113,15 @@ export default {
                 formData.append('descripcion', this.descripcion);
                 formData.append('precio', parseFloat(this.precio));
                 formData.append('cantidad', parseInt(this.cantidad));
-                formData.append('imagen', this.imagen);
+                formData.append('imagen', this.$store.state.img_product);
+
 
                 const response = await axios.post('/api/products', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     }
+
+
                 });
 
                 // Éxito - redirigir o limpiar formulario
@@ -160,7 +171,8 @@ export default {
                 }
                 return false;
             }
-        }
+        },
+        
     }
 }
 </script>
@@ -172,7 +184,7 @@ export default {
     align-items: center;
 }
 .v-text-field {
-    margin: 0 2em;
+    margin: 1em 2em;
 }
 .v-combobox {
     max-width: 45%;
@@ -181,5 +193,10 @@ export default {
     display : flex;
     flex-direction: column;
     justify-content: center;
+}
+.overlay-items-content{
+    background-color: rgb(0, 0, 0);
+    min-width: max-content;
+    border-radius: 1em;
 }
 </style>
