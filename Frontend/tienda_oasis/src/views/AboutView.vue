@@ -1,5 +1,8 @@
 <template>
-    <NavBar />
+    <header class="tm-site-header">
+       
+        <NavBar></NavBar>
+    </header> 
     <div class="about-container">
         <h1>Sobre Nuestra Tienda Digital</h1>
 

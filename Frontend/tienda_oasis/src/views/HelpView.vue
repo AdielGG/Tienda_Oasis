@@ -1,5 +1,8 @@
 <template>
-    <NavBar />
+    <header class="tm-site-header">
+       
+        <NavBar></NavBar>
+    </header> 
     <div class="about-container">
         <h1>Esta es la PAgina de ayuda</h1>
 

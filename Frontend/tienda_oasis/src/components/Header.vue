@@ -1,5 +1,5 @@
 <template>
-  <header class="tm-site-header">
+  <header class="tm-site-header main-header">
         <section class="site-title">
 
             <p class="tm-site-description">Tu Tienda Favorita</p>
@@ -27,9 +27,7 @@ export default {
 	text-shadow: 0px 3px 2px rgba(62,62,62,1);
 }
 .tm-site-header{
-    background: url('../assets/portada.jpg') no-repeat;
-	height: 20em;
-    background-size: cover;
+   
     position: relative;
     
     display: flex;
@@ -39,6 +37,12 @@ export default {
     flex-wrap: wrap;
     flex-direction: row;
 }
+.main-header{
+     background: url('../assets/portada.jpg') no-repeat;
+	height: 20em;
+    background-size: cover;
+}
+
 @media (max-width: 768px) {
     .site-title{
         font-family: 'Open Sans', Helvetica, Arial, sans-serif;

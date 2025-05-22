@@ -1,10 +1,9 @@
-import store from '@/store/store';
 <template>
     <nav class="navbar">
         <v-btn class="nav-toggle" @click="toggleMenu"> 
             <v-icon size="x-large">mdi-menu</v-icon>
         </v-btn>
-
+        
         <div :class="class1">
             <ul class="nav nav-fill tm-main-nav-ul">
                 <router-link to="/" class="nav-item">Inicio</router-link>
@@ -30,9 +29,12 @@ export default {
             this.active_nav = !this.active_nav;
         }
     },
-    mounted() {
+    beforeMount() {
         this.active_nav = this.$store.state.menu;
     },
+    created() {
+        this.active_nav = this.$store.state.menu;
+    }
     
 
 }
@@ -126,7 +128,7 @@ a {
 
         position: absolute;
         top: 100%;
-        right: 0;
+        right: 100%;
 
         z-index: 1000;
 
@@ -152,7 +154,7 @@ a {
         color: rgb(0, 174, 255);
     }
     .tm-main-nav_active {
-        right: 100% ;
+        right: 0 ;
 
     }
 }
