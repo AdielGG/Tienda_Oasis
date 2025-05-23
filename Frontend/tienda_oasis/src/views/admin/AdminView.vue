@@ -1,6 +1,6 @@
 <template>
     <AdminNavbar>
-        <solt> </solt>
+        <slot> </slot>
     </AdminNavbar>
 </template>
 

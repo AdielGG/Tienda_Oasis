@@ -13,7 +13,6 @@ var (
 )
 
 func InitDatabaseConfig() {
-	// func InitDatabaseConfig(namedb, pasword string) {
 	DbConfig = DatabaseConfig{
 		Host:     "127.0.0.1",
 		Port:     "5432",

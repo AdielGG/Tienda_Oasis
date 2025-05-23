@@ -1,7 +1,7 @@
 package main
 
 import (
-	conf "backend/config"
+	"backend/config"
 	"backend/database"
 	auth "backend/modules/auth"
 	products "backend/modules/product"
@@ -21,15 +21,13 @@ var resource embed.FS
 
 func main() {
 
+	//Iniciar router
 	router := gin.New()
 	router.Use(gin.Recovery())
 	router.Use(cors.Default())
 
-	database.InitDB()
-
-	router.StaticFS("/resource", http.FS(resource))
-
 	//Serve resource files
+	router.StaticFS("/resource", http.FS(resource))
 	resources.InitResourceRoutes(router, &resource)
 
 	//Endpoints User
@@ -42,9 +40,9 @@ func main() {
 	suggestions.InitSuggestionRoutes(router)
 
 	//Iniciar Base de Datos
-	conf.InitDatabaseConfig()
+	database.InitDB()
 
 	//Iniciar Servidor
-	router.Run(conf.ServerHost + ":" + conf.ServerPort)
+	router.Run(config.ServerHost + ":" + config.ServerPort)
 	fmt.Scanln()
 }

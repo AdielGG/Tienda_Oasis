@@ -1,7 +1,7 @@
 package database
 
 import (
-	cfg "backend/config"
+	"backend/config"
 	"backend/models"
 	"fmt"
 
@@ -13,6 +13,7 @@ var DB *gorm.DB
 var er error
 
 func InitDB() {
+	config.InitDatabaseConfig()
 	DB, er = CreateDB()
 
 	if er != nil {
@@ -22,7 +23,7 @@ func InitDB() {
 
 func CreateDB() (*gorm.DB, error) {
 
-	dbURL := "host=" + cfg.DbConfig.Host + " port=" + cfg.DbConfig.Port + " user=" + cfg.DbConfig.User + " password=" + cfg.DbConfig.Password + " dbname=" + cfg.DbConfig.Database
+	dbURL := "host=" + config.DbConfig.Host + " port=" + config.DbConfig.Port + " user=" + config.DbConfig.User + " password=" + config.DbConfig.Password + " dbname=" + config.DbConfig.Database
 	fmt.Println(dbURL + " \n\n\n")
 	db, err := gorm.Open(postgres.Open(dbURL), &gorm.Config{})
 	if err != nil {

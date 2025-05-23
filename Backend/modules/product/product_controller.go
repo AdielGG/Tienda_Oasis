@@ -11,7 +11,10 @@ import (
 )
 
 func GetAllProducts(c *gin.Context) {
-	products, err := database.GetAllProducts()
+	var products []models.Product
+
+	err := database.DB.Find(&products).Error
+
 	if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -28,7 +31,7 @@ func CreateProduct(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	err = database.CreateProduct(product)
+	err = database.DB.Create(&product).Error
 	if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -40,13 +43,15 @@ func CreateProduct(c *gin.Context) {
 func GetProductByType(c *gin.Context) {
 	Type := c.Param("type")
 
-	product, err := database.GetProductByType(Type)
+	var products []models.Product
+
+	err := database.DB.Where("type = ?", Type).Find(&products)
 	if err != nil {
 		log.Println(err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
 	}
-	c.JSON(http.StatusOK, product)
+	c.JSON(http.StatusOK, products)
 }
 
 func GetProductByID(c *gin.Context) {
@@ -57,7 +62,9 @@ func GetProductByID(c *gin.Context) {
 		return
 	}
 
-	product, err := database.GetProduct(id)
+	var product models.Product
+
+	err = database.DB.First(&product, id).Error
 	if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -74,7 +81,7 @@ func UpdateProduct(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	err = database.UpdateProduct(product)
+	err = database.DB.Save(&product).Error
 	if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -90,7 +97,7 @@ func DeleteProduct(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	err = database.DeleteProduct(id)
+	err = database.DB.Delete(&models.Product{}, id).Error
 	if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

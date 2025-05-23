@@ -36,7 +36,7 @@
 </template>
 <script setup>
 import { ref } from "vue";
-
+import store from '../store/store.js'
 const form = ref({
   media: {},
 });
@@ -50,16 +50,10 @@ const handelFileUpload = (e) => {
   const src = URL.createObjectURL(file);
   imageSrc.value = src;
   
-  form.value.media = e.target.files[0];
-  this.$store.commit('setImgProduct', e.target.files[0]);
-  console.log(form.value.media, "file upload");
+  this.$store.commit('setImgProduct', file);
 
-  console.log("files already uploaded", imageSrc.value);
 };
 
-const removeItem = (index) => {
-  imageSrc.value = "";
-};
 </script>
 
 <style scoped>

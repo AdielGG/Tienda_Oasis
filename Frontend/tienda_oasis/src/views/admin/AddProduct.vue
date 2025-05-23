@@ -5,7 +5,7 @@
             <div class="text-center">
                 <h1>Nuevo Producto</h1>
             </div>
-            <v-form @submit.prevent="addProduct">
+            <v-form>
                 <div class="input-pair">
                     <v-text-field 
                       label="Nombre" 
@@ -33,12 +33,63 @@
                       :error-messages="cantidadErrors"
                     ></v-text-field>
                 </div>
+
                 <div class="input-pair">
                     
                 </div>
                 <div class="input-pair">
-                    <AddImg></AddImg>
-                    <AddFiles></AddFiles>
+                    <div class="file-container">
+                        <div class="images">
+                                <div class="image-container">
+                                    <v-icon size="70px">mdi-archive</v-icon>
+                                    
+                                    <span >{{ fileName }}</span>
+                                </div>
+                        </div>
+                        <form class="inputfile">
+                            <input
+                                class="fileinput"
+                                type="file"                                
+                                id="media"
+                                accept="apllication/*"
+                                @change="(event) => onFileChange(event)"
+                            />
+                            <div>
+                                <section>
+                                <v-icon size="x-large">mdi-cloud-upload</v-icon> 
+                                Contenido
+                                </section>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="file-container">
+                        <div class="images">
+                            <div
+                                
+                                class="images-lists"
+                            >
+                                <div class="image-container">
+                                    <img v-if="imageSrc != ''" :src="imageSrc" id="output" class="image-style" />
+                                    <v-icon v-else size="x-large">mdi-image</v-icon>
+                                </div>
+                            </div>
+                        </div>
+                        <form class="inputfile">
+                            <input
+                                class="fileinput"
+                                type="file"
+                                id="media"
+                                accept="image/*"
+                                @change="(event) => onImgChange(event)"
+                            />
+                            <div>
+                                <section>
+                                <v-icon size="x-large">mdi-cloud-upload</v-icon> 
+                                    Imagen
+                                </section>
+                            </div>
+                        </form>
+                    </div>
                 </div>
 
                 <div class="text-center aling-items-center">
@@ -46,7 +97,7 @@
                       <v-btn 
                       style="margin-bottom: 1em;"
                       color="primary" 
-                      @click="addProduct"
+                      @click="uploadImage"
                       :loading="loading"
                       >
                       {{ loading ? 'Procesando...' : 'Agregar' }}
@@ -71,7 +122,7 @@ import AddImg from '@/components/AddImg.vue';
 import AddFiles from '@/components/AddFiles.vue';
 import { z } from 'zod';
 import { productSchema } from '@/plugins/validationSchemas';
-
+import axios from 'axios';
 
 export default {
     components: {
@@ -91,52 +142,60 @@ export default {
             ErrorTitle: '',
             loading: false,
             file: null,
+            fileName: null,
+            img: null,
+            imageSrc: '',
         };
     },
-    watch:{
-        files(newValue){
-            console.log(newValue);
-        }
-    },
+    
     methods: {
-        async addProduct() {
-            if (!this.validar()) {
-                return;
-            }
+        onFileChange(e) {
+            this.file = e.target.files[0];
+            this.fileName = this.file.name;
+        },
 
-            console.log(this.imagen);
-            this.loading = true;
-            
+/************************************************************************* */
+        onImgChange(e) {
+            this.img = e.target.files[0];
+            this.imageSrc = URL.createObjectURL(this.img);
+        },
+
+/************************************************************************* */
+        async uploadFile() {
+            const formData = new FormData();
+            formData.append('file', this.file);
             try {
-                const formData = new FormData();
-                formData.append('nombre', this.nombre);
-                formData.append('descripcion', this.descripcion);
-                formData.append('precio', parseFloat(this.precio));
-                formData.append('cantidad', parseInt(this.cantidad));
-                formData.append('imagen', this.$store.state.img_product);
-
-
-                const response = await axios.post('/api/products', formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-
-
-                });
-
-                // Éxito - redirigir o limpiar formulario
-                this.$router.push('/admin/products');
-                
+            const response = await axios.post('http://localhost:8080/upload/programs', formData, {
+                headers: {
+                'Content-Type': 'multipart/form-data' // No es necesario si Axios lo maneja automáticamente
+                }
+            });
+            console.log('Archivo subido:', response.data);
             } catch (error) {
-                this.dialog = true;
-                this.errorText = 'Error al agregar el producto';
-                this.ErrorTitle = 'Error del servidor';
-                console.error(error);
-            } finally {
-                this.loading = false;
+            console.error('Error al subir el archivo:', error);
             }
         },
+
+/************************************************************************* */
+        async uploadImage() {
+            const formData = new FormData();
+            formData.append('file', this.img);
+            try {
+            const response = await axios.post('http://localhost:8080/upload/img', formData, {
+                headers: {
+                'Content-Type': 'image/*' 
+                }
+            });
+            console.log('Archivo subido:', response.data);
+            return response.data.image;
+            } catch (error) {
+            console.error('Error al subir el archivo:', error);
+            }
+        },
+
+ /*************************************************************************** */       
         validar() {
+            return true;
             try {
                 // Convertir a números para validación
                 const precioNum = parseFloat(this.precio);
@@ -171,8 +230,7 @@ export default {
                 }
                 return false;
             }
-        },
-        
+        }, 
     }
 }
 </script>
@@ -198,5 +256,97 @@ export default {
     background-color: rgb(0, 0, 0);
     min-width: max-content;
     border-radius: 1em;
+}
+</style>
+<style scoped>
+.container {
+  margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+}
+
+
+form.inputfile {
+  
+  width:max-content;
+  border-radius: 5px;
+  border: 1.5px dashed #a0a0a0;
+  cursor: pointer;
+}
+form.inputfile div {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+form.inputfile input {
+   
+  color: #0c5645;
+  background-color: #117a60;
+  margin: 0;
+  padding: 0;
+  width: 8em;
+  height: 4em;
+  outline: none;
+  opacity: 0;
+  z-index: 3;
+    cursor: pointer !important;
+    position: relative;
+}
+
+form.inputfile section {
+  cursor: pointer;
+  z-index: 0;
+  position: unset;
+  margin-top: -55px;
+}
+
+.images {
+  position: relative;
+  margin: 4em 0 2em;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.images-lists {
+  position: relative;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.image-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin: 1em;
+    padding: 4px;
+    border: 0.5px solid #a0a0a0;
+    border-radius: 10px;
+}
+
+.image-style {
+  height: 150px;
+  width: 150px;
+  object-fit: cover;
+}
+
+.cross-icon {
+    position: relative;
+    color: red;
+  top: -4em;
+  left: -8em;
+  cursor: pointer;
+}
+.file-container{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 </style>

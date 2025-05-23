@@ -1,38 +1,7 @@
 
 <template>
       
-    <div class="file-container">
-        <div class="images">
-            <div
-                v-if="imageSrc != ''"
-                :key="1"
-                class="images-lists"
-            >
-                <div class="image-container">
-                    <v-icon size="70px">mdi-archive
-                    </v-icon>
-                    <span>
-                        {{ form.media.name }}
-                    </span>
-                </div>
-            </div>
-        </div>
-        <form>
-        <input
-            class="fileinput"
-            type="file"
-            id="media"
-            accept="apllication/*"
-            @change="(event) => handelFileUpload(event)"
-        />
-        <div>
-            <section>
-            <v-icon size="x-large">mdi-cloud-upload</v-icon> 
-            Contenido
-            </section>
-        </div>
-        </form>
-    </div>
+    
 </template>
 <script setup>
 import { ref } from "vue";
@@ -43,7 +12,7 @@ const form = ref({
 });
 
 const fileSrc = ref("");
-const fileName = ref("")
+const fileName = ref("");
 
 const handelFileUpload = (e) => {
   var file = e.target.files[0] || e.dataTransfer.files[0]; 
